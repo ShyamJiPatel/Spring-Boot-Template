@@ -17,38 +17,36 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	public Project getProject(Long id) {
-		return projectRepository.getProject(id, BaseEntity.getCurrentUser());
+		return projectRepository.getProject(id, BaseEntity.getCurrentUserId());
 	}
 
 	@Override
 	@Transactional
 	public Long saveOrUpdateProject(Project project) {
 		if (project.getId() == null) {
-			project.setCreatedBy(BaseEntity.getCurrentUser());
+			project.setCreatedUserId(BaseEntity.getCurrentUserId());
 			projectRepository.saveAndFlush(project);
 		} else {
-			project.setUpdatedBy(BaseEntity.getCurrentUser());
+			project.setUpdatedUserId(BaseEntity.getCurrentUserId());
 			projectRepository.saveAndFlush(project);
 		}
 		return project.getId();
 	}
 
 	@Override
-	@Transactional
 	public Long deleteProject(Long id) {
-		projectRepository.deleteProject(id, BaseEntity.getCurrentUser());
+		projectRepository.deleteProject(id, BaseEntity.getCurrentUserId());
 		return id;
 	}
 
 	@Override
 	public Iterable<Project> findAll() {
-		return projectRepository.findAll(BaseEntity.getCurrentUser());
+		return projectRepository.findAll(BaseEntity.getCurrentUserId());
 	}
 
 	@Override
-	@Transactional
 	public Long archiveProject(Long id) {
-		projectRepository.archiveProject(id, BaseEntity.getCurrentUser());
+		projectRepository.archiveProject(id, BaseEntity.getCurrentUserId());
 		return id;
 	}
 

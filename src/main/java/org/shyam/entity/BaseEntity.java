@@ -14,10 +14,10 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 
+import org.shyam.security.JwtUser;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -34,23 +34,23 @@ public abstract class BaseEntity implements Serializable {
 
 	@Column(name = "created_at", updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonIgnore
 	private Date createdAt;
 
-	@Size(max = 20)
-	@Column(name = "created_by", length = 20, updatable = false)
+	@Column(updatable = false)
 	@JsonIgnore
-	private String createdBy;
+	private Long createdUserId;
 
 	@Column(name = "updated_at")
 	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@JsonIgnore
 	private Date updatedAt;
 
-	@Size(max = 20)
-	@Column(name = "updated_by", length = 20)
+	@Column(updatable = false)
 	@JsonIgnore
-	private String updatedBy;
+	private Long updatedUserId;
 
 	@Column(name = "archived")
 	@JsonIgnore
@@ -68,12 +68,12 @@ public abstract class BaseEntity implements Serializable {
 		this.createdAt = createdAt;
 	}
 
-	public String getCreatedBy() {
-		return createdBy;
+	public Long getCreatedUserId() {
+		return createdUserId;
 	}
 
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
+	public void setCreatedUserId(Long createdUserId) {
+		this.createdUserId = createdUserId;
 	}
 
 	public Date getUpdatedAt() {
@@ -84,12 +84,12 @@ public abstract class BaseEntity implements Serializable {
 		this.updatedAt = updatedAt;
 	}
 
-	public String getUpdatedBy() {
-		return updatedBy;
+	public Long getUpdatedUserId() {
+		return updatedUserId;
 	}
 
-	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
+	public void setUpdatedUserId(Long updatedUserId) {
+		this.updatedUserId = updatedUserId;
 	}
 
 	/**
@@ -131,8 +131,8 @@ public abstract class BaseEntity implements Serializable {
 		return 3 * Objects.hash(id);
 	}
 
-	public static String getCurrentUser() {
-		return ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+	public static Long getCurrentUserId() {
+		return ((JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
 	}
 
 }

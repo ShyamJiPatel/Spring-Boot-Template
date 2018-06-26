@@ -17,38 +17,36 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Employee getEmployee(Long id) {
-		return employeeRepository.getEmployee(id, BaseEntity.getCurrentUser());
+		return employeeRepository.getEmployee(id, BaseEntity.getCurrentUserId());
 	}
 
 	@Override
 	@Transactional
 	public Long saveOrUpdateEmployee(Employee employee) {
 		if (employee.getId() == null) {
-			employee.setCreatedBy(BaseEntity.getCurrentUser());
+			employee.setCreatedUserId(BaseEntity.getCurrentUserId());
 			employeeRepository.saveAndFlush(employee);
 		} else {
-			employee.setUpdatedBy(BaseEntity.getCurrentUser());
+			employee.setUpdatedUserId(BaseEntity.getCurrentUserId());
 			employeeRepository.saveAndFlush(employee);
 		}
 		return employee.getId();
 	}
 
 	@Override
-	@Transactional
 	public Long deleteEmployee(Long id) {
-		employeeRepository.deleteEmployee(id, BaseEntity.getCurrentUser());
+		employeeRepository.deleteEmployee(id, BaseEntity.getCurrentUserId());
 		return id;
 	}
 
 	@Override
 	public Iterable<Employee> findAll() {
-		return employeeRepository.findAllEmployee(BaseEntity.getCurrentUser());
+		return employeeRepository.findAllEmployee(BaseEntity.getCurrentUserId());
 	}
 
 	@Override
-	@Transactional
 	public Long archiveEmployee(Long id) {
-		employeeRepository.archiveEmployee(id, BaseEntity.getCurrentUser());
+		employeeRepository.archiveEmployee(id, BaseEntity.getCurrentUserId());
 		return id;
 	}
 

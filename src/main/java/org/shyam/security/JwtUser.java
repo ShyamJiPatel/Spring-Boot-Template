@@ -15,7 +15,6 @@ public class JwtUser implements UserDetails {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final Long id;
-	private final String username;
 	private final String firstname;
 	private final String lastname;
 	private final String password;
@@ -24,10 +23,9 @@ public class JwtUser implements UserDetails {
 	private final boolean enabled;
 	private final Date lastPasswordResetDate;
 
-	public JwtUser(Long id, String username, String firstname, String lastname, String email, String password,
+	public JwtUser(Long id, String firstname, String lastname, String email, String password,
 			Collection<? extends GrantedAuthority> authorities, boolean enabled, Date lastPasswordResetDate) {
 		this.id = id;
-		this.username = username;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.email = email;
@@ -40,11 +38,6 @@ public class JwtUser implements UserDetails {
 	@JsonIgnore
 	public Long getId() {
 		return id;
-	}
-
-	@Override
-	public String getUsername() {
-		return username;
 	}
 
 	@JsonIgnore
@@ -96,5 +89,10 @@ public class JwtUser implements UserDetails {
 	@JsonIgnore
 	public Date getLastPasswordResetDate() {
 		return lastPasswordResetDate;
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
 	}
 }
